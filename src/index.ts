@@ -36,19 +36,6 @@ export abstract class BaseRobot {
     return `${this.x},${this.y},${toDirection(this.facing)}`;
   }
 
-  abstract move(): BaseRobot;
-  abstract place(x: number, y: number, facing: string): BaseRobot;
-  abstract rotateClockwise(): BaseRobot;
-  abstract rotateAntiClockwise(): BaseRobot;
-}
-
-export class NewRobot extends BaseRobot {
-  report(): string {
-    return "";
-  }
-  move(): BaseRobot {
-    return this;
-  }
   place(x: number, y: number, facing: string): BaseRobot {
     if (x < 0 || x > 4 || y < 0 || y >> 4) {
       return this;
@@ -67,70 +54,92 @@ export class NewRobot extends BaseRobot {
         return this;
     }
   }
+
+  move(): BaseRobot {
+    return this;
+  }
   rotateClockwise(): BaseRobot {
     return this;
   }
   rotateAntiClockwise(): BaseRobot {
     return this;
+  }
+}
+
+export class NewRobot extends BaseRobot {
+  report(): string {
+    return "";
   }
 }
 
 export class NorthFacingRobot extends BaseRobot {
   move(): BaseRobot {
-    throw new Error("Method not implemented.");
+    if (this.y === 3) {
+      return this;
+    }
+
+    return new NorthFacingRobot(this.y + 1, this.x, this.facing);
   }
-  place(x: number, y: number, facing: string): BaseRobot {
-    throw new Error("Method not implemented.");
-  }
+
   rotateClockwise(): BaseRobot {
-    throw new Error("Method not implemented.");
+    return new EastFacingRobot(this.x, this.y, this.facing);
   }
+
   rotateAntiClockwise(): BaseRobot {
-    throw new Error("Method not implemented.");
+    return new WestFacingRobot(this.x, this.y, this.facing);
   }
 }
 
 export class SouthFacingRobot extends BaseRobot {
   move(): BaseRobot {
-    throw new Error("Method not implemented.");
+    if (this.y === 0) {
+      return this;
+    }
+
+    return new SouthFacingRobot(this.y - 1, this.x, this.facing);
   }
-  place(x: number, y: number, facing: string): BaseRobot {
-    throw new Error("Method not implemented.");
-  }
+
   rotateClockwise(): BaseRobot {
-    throw new Error("Method not implemented.");
+    return new WestFacingRobot(this.x, this.y, this.facing);
   }
+
   rotateAntiClockwise(): BaseRobot {
-    throw new Error("Method not implemented.");
+    return new EastFacingRobot(this.x, this.y, this.facing);
   }
 }
 
 export class EastFacingRobot extends BaseRobot {
   move(): BaseRobot {
-    throw new Error("Method not implemented.");
+    if (this.x === 3) {
+      return this;
+    }
+
+    return new EastFacingRobot(this.y, this.x + 1, this.facing);
   }
-  place(x: number, y: number, facing: string): BaseRobot {
-    throw new Error("Method not implemented.");
-  }
+
   rotateClockwise(): BaseRobot {
-    throw new Error("Method not implemented.");
+    return new SouthFacingRobot(this.x, this.y, this.facing);
   }
+
   rotateAntiClockwise(): BaseRobot {
-    throw new Error("Method not implemented.");
+    return new NorthFacingRobot(this.x, this.y, this.facing);
   }
 }
 
 export class WestFacingRobot extends BaseRobot {
   move(): BaseRobot {
-    throw new Error("Method not implemented.");
+    if (this.x === 0) {
+      return this;
+    }
+
+    return new WestFacingRobot(this.y, this.x - 1, this.facing);
   }
-  place(x: number, y: number, facing: string): BaseRobot {
-    throw new Error("Method not implemented.");
-  }
+
   rotateClockwise(): BaseRobot {
-    throw new Error("Method not implemented.");
+    return new NorthFacingRobot(this.x, this.y, this.facing);
   }
+
   rotateAntiClockwise(): BaseRobot {
-    throw new Error("Method not implemented.");
+    return new SouthFacingRobot(this.x, this.y, this.facing);
   }
 }
