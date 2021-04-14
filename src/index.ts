@@ -1,39 +1,24 @@
-const DIRECTIONS = ["NORTH", "EAST", "SOUTH", "WEST"];
-
-const BOUNDARIES = {
-  __proto__: null,
-  NORTH: 4,
-  SOUTH: 0,
-  EAST: 4,
-};
-
-export function toDirection(index: number) {
-  return DIRECTIONS[Math.abs(index) % 4];
-}
-
 export abstract class BaseRobot {
   private _x;
   private _y;
-  private _facing;
 
   get x(): number {
-    return this.x;
+    return this._x;
   }
   get y(): number {
-    return this.y;
+    return this._y;
   }
-  get facing(): number {
-    return this._facing;
+  get facing() {
+    return "";
   }
 
-  constructor(_x: number, _y: number, _facing: number) {
+  constructor(_x: number, _y: number) {
     this._x = _x;
     this._y = _y;
-    this._facing = _facing;
   }
 
   report(): string {
-    return `${this.x},${this.y},${toDirection(this.facing)}`;
+    return `${this.x},${this.y},${this.facing}`;
   }
 
   place(x: number, y: number, facing: string): BaseRobot {
@@ -43,13 +28,13 @@ export abstract class BaseRobot {
 
     switch (facing.trim().toLowerCase()) {
       case "north":
-        return new NorthFacingRobot(x, y, 0);
+        return new NorthFacingRobot(x, y);
       case "east":
-        return new EastFacingRobot(x, y, 1);
+        return new EastFacingRobot(x, y);
       case "south":
-        return new SouthFacingRobot(x, y, 2);
+        return new SouthFacingRobot(x, y);
       case "west":
-        return new WestFacingRobot(x, y, 3);
+        return new WestFacingRobot(x, y);
       default:
         return this;
     }
@@ -68,78 +53,95 @@ export abstract class BaseRobot {
 
 export class NewRobot extends BaseRobot {
   report(): string {
-    return "";
+    return "NOT YET PLACED";
   }
 }
 
 export class NorthFacingRobot extends BaseRobot {
+  get facing() {
+    return "NORTH";
+  }
+
   move(): BaseRobot {
     if (this.y === 3) {
       return this;
     }
 
-    return new NorthFacingRobot(this.y + 1, this.x, this.facing);
+    return new NorthFacingRobot(this.x, this.y + 1);
   }
 
   rotateClockwise(): BaseRobot {
-    return new EastFacingRobot(this.x, this.y, this.facing);
+    return new EastFacingRobot(this.x, this.y);
   }
 
   rotateAntiClockwise(): BaseRobot {
-    return new WestFacingRobot(this.x, this.y, this.facing);
+    return new WestFacingRobot(this.x, this.y);
   }
 }
 
 export class SouthFacingRobot extends BaseRobot {
+  get facing() {
+    return "SOUTH";
+  }
   move(): BaseRobot {
     if (this.y === 0) {
       return this;
     }
 
-    return new SouthFacingRobot(this.y - 1, this.x, this.facing);
+    return new SouthFacingRobot(this.x, this.y - 1);
   }
 
   rotateClockwise(): BaseRobot {
-    return new WestFacingRobot(this.x, this.y, this.facing);
+    return new WestFacingRobot(this.x, this.y);
   }
 
   rotateAntiClockwise(): BaseRobot {
-    return new EastFacingRobot(this.x, this.y, this.facing);
+    return new EastFacingRobot(this.x, this.y);
   }
 }
 
 export class EastFacingRobot extends BaseRobot {
+  get facing() {
+    return "EAST";
+  }
   move(): BaseRobot {
     if (this.x === 3) {
       return this;
     }
 
-    return new EastFacingRobot(this.y, this.x + 1, this.facing);
+    return new EastFacingRobot(this.x + 1, this.y);
   }
 
   rotateClockwise(): BaseRobot {
-    return new SouthFacingRobot(this.x, this.y, this.facing);
+    return new SouthFacingRobot(this.x, this.y);
   }
 
   rotateAntiClockwise(): BaseRobot {
-    return new NorthFacingRobot(this.x, this.y, this.facing);
+    return new NorthFacingRobot(this.x, this.y);
   }
 }
 
 export class WestFacingRobot extends BaseRobot {
+  get facing() {
+    return "WEST";
+  }
   move(): BaseRobot {
     if (this.x === 0) {
       return this;
     }
 
-    return new WestFacingRobot(this.y, this.x - 1, this.facing);
+    return new WestFacingRobot(this.x - 1, this.y);
   }
 
   rotateClockwise(): BaseRobot {
-    return new NorthFacingRobot(this.x, this.y, this.facing);
+    return new NorthFacingRobot(this.x, this.y);
   }
 
   rotateAntiClockwise(): BaseRobot {
-    return new SouthFacingRobot(this.x, this.y, this.facing);
+    return new SouthFacingRobot(this.x, this.y);
   }
+}
+
+export function Robot() {
+  return new NewRobot(0, 0);
 }
