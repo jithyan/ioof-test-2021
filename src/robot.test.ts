@@ -1,4 +1,4 @@
-import { Robot } from ".";
+import { Robot } from "./robot";
 
 describe("tests", () => {
   it("test case 1", () => {

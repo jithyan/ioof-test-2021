@@ -7,7 +7,7 @@
     "test": "jest",
     "start:build": "tsc -w",
     "start:run": "nodemon build/index.js",
-    "start": "concurrently yarn:start:*"
+    "start": "concurrently npm:start:*"
   },
   "repository": {
     "type": "git",
