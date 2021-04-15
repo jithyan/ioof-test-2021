@@ -12,7 +12,15 @@ const ORDERED_FACTORIES = [
   PLACED_ROBOTS_FACTORIES.west,
 ];
 
-abstract class BaseRobot {
+export interface IRobot {
+  report: () => string;
+  move: () => IRobot;
+  rotateClockwise: () => IRobot;
+  rotateAntiClockwise: () => IRobot;
+  place: (x: number, y: number, facing: string) => IRobot;
+}
+
+abstract class BaseRobot implements IRobot {
   private _x;
   private _y;
   private _orderedFactoryIndex;
