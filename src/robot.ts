@@ -1,15 +1,15 @@
-const PLACED_ROBOTS_FACTORIES = {
-  north: (x: number, y: number) => new NorthFacingRobot(x, y, 0),
-  east: (x: number, y: number) => new EastFacingRobot(x, y, 1),
-  south: (x: number, y: number) => new SouthFacingRobot(x, y, 2),
-  west: (x: number, y: number) => new WestFacingRobot(x, y, 3),
+const PLACED_ROBOT_FACTORIES = {
+  north: (x: number, y: number) => new NorthFacingRobot(x, y),
+  east: (x: number, y: number) => new EastFacingRobot(x, y),
+  south: (x: number, y: number) => new SouthFacingRobot(x, y),
+  west: (x: number, y: number) => new WestFacingRobot(x, y),
 };
 
 const ORDERED_FACTORIES = [
-  PLACED_ROBOTS_FACTORIES.north,
-  PLACED_ROBOTS_FACTORIES.east,
-  PLACED_ROBOTS_FACTORIES.south,
-  PLACED_ROBOTS_FACTORIES.west,
+  PLACED_ROBOT_FACTORIES.north,
+  PLACED_ROBOT_FACTORIES.east,
+  PLACED_ROBOT_FACTORIES.south,
+  PLACED_ROBOT_FACTORIES.west,
 ];
 
 export interface IRobot {
@@ -35,7 +35,7 @@ abstract class BaseRobot implements IRobot {
     return "";
   }
 
-  constructor(_x: number, _y: number, _orderedFactoryIndex = -1) {
+  constructor(_x: number, _y: number, _orderedFactoryIndex: number) {
     this._x = _x;
     this._y = _y;
     this._orderedFactoryIndex = _orderedFactoryIndex;
@@ -48,8 +48,8 @@ abstract class BaseRobot implements IRobot {
   place(x: number, y: number, facing: string): BaseRobot {
     const facingParsed = facing
       .trim()
-      .toLowerCase() as keyof typeof PLACED_ROBOTS_FACTORIES;
-    const factory = PLACED_ROBOTS_FACTORIES[facingParsed];
+      .toLowerCase() as keyof typeof PLACED_ROBOT_FACTORIES;
+    const factory = PLACED_ROBOT_FACTORIES[facingParsed];
 
     if (x < 0 || x > 4 || y < 0 || y > 4 || !Boolean(factory)) {
       return this;
@@ -77,61 +77,65 @@ abstract class BaseRobot implements IRobot {
 }
 
 class NewRobot extends BaseRobot {
+  constructor(x: number, y: number) {
+    super(x, y, -1);
+  }
+
   report(): string {
     return "NOT YET PLACED";
   }
 }
 
 class NorthFacingRobot extends BaseRobot {
+  constructor(x: number, y: number) {
+    super(x, y, 0);
+  }
+
   get facing() {
     return "NORTH";
   }
 
   move(): BaseRobot {
-    if (this.y === 4) {
-      return this;
-    }
-
-    return PLACED_ROBOTS_FACTORIES.north(this.x, this.y + 1);
-  }
-}
-
-class SouthFacingRobot extends BaseRobot {
-  get facing() {
-    return "SOUTH";
-  }
-  move(): BaseRobot {
-    if (this.y === 0) {
-      return this;
-    }
-
-    return PLACED_ROBOTS_FACTORIES.south(this.x, this.y - 1);
+    return this.place(this.x, this.y + 1, this.facing);
   }
 }
 
 class EastFacingRobot extends BaseRobot {
+  constructor(x: number, y: number) {
+    super(x, y, 1);
+  }
+
   get facing() {
     return "EAST";
   }
   move(): BaseRobot {
-    if (this.x === 4) {
-      return this;
-    }
+    return this.place(this.x + 1, this.y, this.facing);
+  }
+}
 
-    return PLACED_ROBOTS_FACTORIES.east(this.x + 1, this.y);
+class SouthFacingRobot extends BaseRobot {
+  constructor(x: number, y: number) {
+    super(x, y, 2);
+  }
+
+  get facing() {
+    return "SOUTH";
+  }
+  move(): BaseRobot {
+    return this.place(this.x, this.y - 1, this.facing);
   }
 }
 
 class WestFacingRobot extends BaseRobot {
+  constructor(x: number, y: number) {
+    super(x, y, 3);
+  }
+
   get facing() {
     return "WEST";
   }
   move(): BaseRobot {
-    if (this.x === 0) {
-      return this;
-    }
-
-    return PLACED_ROBOTS_FACTORIES.west(this.x - 1, this.y);
+    return this.place(this.x - 1, this.y, this.facing);
   }
 }
 

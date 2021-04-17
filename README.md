@@ -11,3 +11,4 @@ Commands are case insensitive.
 1. `npm i`
 2. `npm test`
 3. `npm start`
+4. Wait for the `Ready to start` message before issuing commands.
