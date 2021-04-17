@@ -7,7 +7,7 @@ describe("tests", () => {
   });
 
   it("test case 2", () => {
-    const actual = Robot().place(0, 0, "NORTH").rotateAntiClockwise().report();
+    const actual = Robot().place(0, 0, "NORTH").left().report();
     expect(actual).toEqual("0,0,WEST");
   });
 
@@ -16,7 +16,7 @@ describe("tests", () => {
       .place(1, 2, "east")
       .move()
       .move()
-      .rotateAntiClockwise()
+      .left()
       .move()
       .report();
     expect(actual).toEqual("3,3,NORTH");
@@ -26,9 +26,9 @@ describe("tests", () => {
     it("should ignore all commands until placed", () => {
       const robots = [
         Robot().move(),
-        Robot().rotateAntiClockwise(),
-        Robot().rotateClockwise(),
-        Robot().move().rotateAntiClockwise().rotateClockwise(),
+        Robot().left(),
+        Robot().right(),
+        Robot().move().left().right(),
       ];
 
       expect(
@@ -59,14 +59,10 @@ describe("tests", () => {
     it("when rotating clockwise, it goes from north to east, south, west, north", () => {
       const placedRobot = Robot().place(2, 2, "north");
       const actual = [
-        placedRobot.rotateClockwise(),
-        placedRobot.rotateClockwise().rotateClockwise(),
-        placedRobot.rotateClockwise().rotateClockwise().rotateClockwise(),
-        placedRobot
-          .rotateClockwise()
-          .rotateClockwise()
-          .rotateClockwise()
-          .rotateClockwise(),
+        placedRobot.right(),
+        placedRobot.right().right(),
+        placedRobot.right().right().right(),
+        placedRobot.right().right().right().right(),
       ];
 
       const expected = ["2,2,EAST", "2,2,SOUTH", "2,2,WEST", "2,2,NORTH"];
@@ -77,17 +73,10 @@ describe("tests", () => {
     it("when rotating anti-clockwise, it goes from north to west, south, east, north", () => {
       const placedRobot = Robot().place(2, 2, "north");
       const actual = [
-        placedRobot.rotateAntiClockwise(),
-        placedRobot.rotateAntiClockwise().rotateAntiClockwise(),
-        placedRobot
-          .rotateAntiClockwise()
-          .rotateAntiClockwise()
-          .rotateAntiClockwise(),
-        placedRobot
-          .rotateAntiClockwise()
-          .rotateAntiClockwise()
-          .rotateAntiClockwise()
-          .rotateAntiClockwise(),
+        placedRobot.left(),
+        placedRobot.left().left(),
+        placedRobot.left().left().left(),
+        placedRobot.left().left().left().left(),
       ];
 
       const expected = ["2,2,WEST", "2,2,SOUTH", "2,2,EAST", "2,2,NORTH"];
@@ -98,30 +87,22 @@ describe("tests", () => {
 
   describe("movement tests", () => {
     it("should decrement x when moving west", () => {
-      const actual = Robot().place(2, 2, "north").rotateAntiClockwise().move();
+      const actual = Robot().place(2, 2, "north").left().move();
       expect(actual.report()).toEqual("1,2,WEST");
     });
 
     it("should decrement y when moving south", () => {
-      const actual = Robot()
-        .place(2, 2, "north")
-        .rotateAntiClockwise()
-        .rotateAntiClockwise()
-        .move();
+      const actual = Robot().place(2, 2, "north").left().left().move();
       expect(actual.report()).toEqual("2,1,SOUTH");
     });
 
     it("should increment y when moving north", () => {
-      const actual = Robot()
-        .place(2, 2, "south")
-        .rotateClockwise()
-        .rotateClockwise()
-        .move();
+      const actual = Robot().place(2, 2, "south").right().right().move();
       expect(actual.report()).toEqual("2,3,NORTH");
     });
 
     it("should increment x when moving east", () => {
-      const actual = Robot().place(2, 2, "north").rotateClockwise().move();
+      const actual = Robot().place(2, 2, "north").right().move();
       expect(actual.report()).toEqual("3,2,EAST");
     });
 

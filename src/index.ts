@@ -8,8 +8,8 @@ const unrecognized = (command: string) => {
   return robot;
 };
 const move = (command: string) => robot.move();
-const left = (command: string) => robot.rotateAntiClockwise();
-const right = (command: string) => robot.rotateClockwise();
+const left = (command: string) => robot.left();
+const right = (command: string) => robot.right();
 const place = (command: string) => {
   const { x, y, facing } = parsePlaceCommand(command);
   return (!Boolean(x) && x !== 0) ||

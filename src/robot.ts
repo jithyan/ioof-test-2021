@@ -15,8 +15,8 @@ const ORDERED_FACTORIES = [
 export interface IRobot {
   report: () => string;
   move: () => IRobot;
-  rotateClockwise: () => IRobot;
-  rotateAntiClockwise: () => IRobot;
+  right: () => IRobot;
+  left: () => IRobot;
   place: (x: number, y: number, facing: string) => IRobot;
 }
 
@@ -61,14 +61,14 @@ abstract class BaseRobot implements IRobot {
     return this;
   }
 
-  rotateClockwise(): BaseRobot {
+  right(): BaseRobot {
     const nextIndex = (this._orderedFactoryIndex + 1) % 4;
     return this._orderedFactoryIndex >= 0
       ? ORDERED_FACTORIES[nextIndex](this._x, this._y)
       : this;
   }
 
-  rotateAntiClockwise(): BaseRobot {
+  left(): BaseRobot {
     const nextIndex = (3 + this._orderedFactoryIndex) % 4;
     return this._orderedFactoryIndex >= 0
       ? ORDERED_FACTORIES[nextIndex](this._x, this._y)
